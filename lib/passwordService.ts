@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/client"
 import { mapToUI } from "./mappers"
 import type { UIPassword } from "./passwordTypes"
 
@@ -10,6 +10,7 @@ export async function savePassword(data: {
   url?: string
   notas?: string
 }) {
+  const supabase = createClient()
   const { error } = await supabase.from("passwords").insert(data)
 
   if (error) {
@@ -19,6 +20,7 @@ export async function savePassword(data: {
 }
 
 export async function getPasswords(userId: string): Promise<UIPassword[]> {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("passwords")
     .select("*")
@@ -30,6 +32,7 @@ export async function getPasswords(userId: string): Promise<UIPassword[]> {
 }
 
 export async function deletePassword(passwordId: string) {
+  const supabase = createClient()
   const { error } = await supabase
     .from("passwords")
     .delete()
@@ -45,6 +48,7 @@ export async function updatePassword(passwordId: string, updates: {
   url?: string
   notas?: string
 }) {
+  const supabase = createClient()
   const { error } = await supabase
     .from("passwords")
     .update(updates)
@@ -54,6 +58,7 @@ export async function updatePassword(passwordId: string, updates: {
 }
 
 export const setFavoritePassword = async (passwordId: string, isFavorite: boolean) => {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("passwords")
     .update({

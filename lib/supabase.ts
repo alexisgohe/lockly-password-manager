@@ -1,7 +1,5 @@
 // lib/supabase.ts
-import { createClient } from "@supabase/supabase-js"
-
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+// Deprecated global client — prefer using `createClient()` from
+// `utils/supabase/client.ts` (which uses the auth-helpers). Re-export
+// the helper to keep compatibility.
+export { createClient } from "@/utils/supabase/client"

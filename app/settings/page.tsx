@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/client"
 import { decryptPassword } from "@/utils/encryption"
 
 interface SettingsData {
@@ -37,6 +37,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchSession = async () => {
       try {
+        const supabase = createClient()
         const { data: { session } } = await supabase.auth.getSession()
 
         if (!session) {
@@ -145,6 +146,7 @@ export default function SettingsPage() {
         return;
       }
 
+      const supabase = createClient()
       const { data: passwords, error } = await supabase
         .from("passwords")
         .select("*")

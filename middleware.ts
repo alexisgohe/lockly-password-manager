@@ -37,6 +37,22 @@ export async function middleware(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname
 
+  // Logs de depuración: estas salidas aparecen en la terminal del servidor (dev server),
+  // no en la consola del navegador.
+  try {
+    console.log("[middleware] pathname:", pathname)
+    console.log("[middleware] isAuthenticated:", isAuthenticated)
+    console.log("[middleware] cookies preview:", {
+      'sb:token': req.cookies.get('sb:token')?.value,
+      'sb-access-token': req.cookies.get('sb-access-token')?.value,
+      'sb-refresh-token': req.cookies.get('sb-refresh-token')?.value,
+      'supabase-auth-token': req.cookies.get('supabase-auth-token')?.value,
+    })
+    console.log("[middleware] session:", session)
+  } catch (e) {
+    console.log('[middleware] error al loggear cookies:', e)
+  }
+
   if (isAuthenticated && publicRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL("/vault", req.url))
   }

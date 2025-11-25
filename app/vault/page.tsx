@@ -9,7 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import AddPasswordDialog from "@/components/add-password-dialog"
 import PasswordRow from "@/components/password-row"
 import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/client"
 import { logoutUser } from "@/lib/authService"
 import { getPasswords } from "@/lib/passwordService"
 import type { UIPassword } from "@/lib/passwordTypes"
@@ -26,6 +26,8 @@ export default function VaultPage() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 
   useEffect(() => {
+    const supabase = createClient()
+
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       
@@ -142,7 +144,7 @@ export default function VaultPage() {
   const handleLogout = async () => {
     await logoutUser()
     sessionStorage.removeItem("masterKeyHash")
-    router.push("/")
+    router.push("/login")
   }
 
   const handleAddMultiplePasswords = (newPasswords: UIPassword[]) => {
