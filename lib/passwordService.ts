@@ -25,6 +25,7 @@ export async function getPasswords(userId: string): Promise<UIPassword[]> {
     .from("passwords")
     .select("*")
     .eq("usuario_id", userId)
+    .order("nombre_servicio", { ascending: true })
 
   if (error) throw error
 
