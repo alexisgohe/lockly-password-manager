@@ -32,7 +32,7 @@ export default function VaultPage() {
       const { data: { session } } = await supabase.auth.getSession()
       
       if (!session) {
-        console.log("❌ No hay sesión, redirigiendo a login")
+        // console.log("❌ No hay sesión, redirigiendo a login")
         router.push("/login")
         return
       }
@@ -42,12 +42,12 @@ export default function VaultPage() {
         email: session.user.email!
       }
       
-      console.log(session)
+      // console.log(session)
       setCurrentUser(userData)
 
       try {
         const loadedPasswords = await getPasswords(userData.id)
-        console.log("Contraseñas cargadas:", loadedPasswords)
+        // console.log("Contraseñas cargadas:", loadedPasswords)
         setPasswords(loadedPasswords)
         setFilteredPasswords(loadedPasswords)
       } catch (error) {

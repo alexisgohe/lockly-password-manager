@@ -30,7 +30,7 @@ export default function LoginPage() {
       // Guardar solo el masterKeyHash (el usuario ya está en Supabase)
       sessionStorage.setItem("masterKeyHash", masterKeyHash)
       
-      console.log("✅ Inicio de sesión exitoso:", user.email)
+      // console.log("✅ Inicio de sesión exitoso:", user.email)
       
       router.push("/vault")
       router.refresh() // Forzar actualización

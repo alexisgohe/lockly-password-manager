@@ -42,7 +42,7 @@ export default function SignupPage() {
       // Guardar masterKeyHash
       sessionStorage.setItem("masterKeyHash", masterKeyHash)
       
-      console.log("✅ Registro exitoso:", user.email)
+      // console.log("✅ Registro exitoso:", user.email)
       
       router.push("/vault")
       router.refresh()
