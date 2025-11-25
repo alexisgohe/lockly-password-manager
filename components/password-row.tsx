@@ -8,6 +8,7 @@ import { deletePassword as deletePasswordService } from "@/lib/passwordService"
 import EditPasswordDialog from "./edit-password-dialog"
 import { Star } from "lucide-react"
 import { setFavoritePassword } from "@/lib/passwordService"
+import { useConfirm } from "./confirm-dialog"
 
 interface EncryptedPassword {
   ciphertext: string
@@ -35,6 +36,7 @@ export default function PasswordRow({ password, onDelete, onUpdate }: PasswordRo
   const [decryptedPassword, setDecryptedPassword] = useState<string | null>(null)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isFavorite, setIsFavorite] = useState(!!password.es_favorita)
+  const { confirm, ConfirmDialog } = useConfirm()
 
   const toggleFavorite = async () => {
     try {
@@ -57,31 +59,47 @@ export default function PasswordRow({ password, onDelete, onUpdate }: PasswordRo
 
   const copyPassword = async () => {
     const masterKey = sessionStorage.getItem("masterKeyHash")
-    if (!masterKey) return alert("No se encontró la contraseña maestra")
+
+    if (!masterKey)
+      return toast({
+        title: "Contraseña no encontrada",
+        description: "Por favor inicia sesión nuevamente.",
+        variant: "destructive",
+      })
+
     try {
       const decrypted = await decryptPassword(masterKey, password.password)
       navigator.clipboard.writeText(decrypted)
+
       toast({
         title: "Copiado",
-        description: `Contraseña copiada al portapapeles`,
+        description: "La contraseña fue copiada al portapapeles.",
       })
     } catch (err) {
       console.error("Error al copiar:", err)
       toast({
         title: "Error",
-        description: "No se pudo copiar la contraseña",
+        description: "No se pudo copiar la contraseña.",
         variant: "destructive",
       })
     }
   }
 
   const handleReveal = async () => {
+    const masterKey = sessionStorage.getItem("masterKeyHash")
+
+    if (!masterKey)
+      return toast({
+        title: "Contraseña no encontrada",
+        description: "Por favor inicia sesión nuevamente.",
+        variant: "destructive",
+      })
+
     if (!decryptedPassword) {
-      const masterKey = sessionStorage.getItem("masterKeyHash")
-      if (!masterKey) return alert("No se encontró la contraseña maestra")
       const decrypted = await decryptPassword(masterKey, password.password)
       setDecryptedPassword(decrypted)
     }
+
     setIsRevealed(!isRevealed)
   }
 
@@ -95,7 +113,12 @@ export default function PasswordRow({ password, onDelete, onUpdate }: PasswordRo
   }
 
   const handleDelete = async () => {
-    if (!confirm(`¿Seguro que quieres eliminar la contraseña de "${password.service}"?`)) return
+    const ok = await confirm(
+      "¿Eliminar contraseña?",
+      "Esta acción no se puede deshacer."
+    )
+
+    if (!ok) return
     try {
       await deletePasswordService(password.id)
       onDelete(password.id)
@@ -165,6 +188,7 @@ export default function PasswordRow({ password, onDelete, onUpdate }: PasswordRo
         </div>
       </div>
 
+      <ConfirmDialog />
       <EditPasswordDialog
         password={password}
         onUpdate={onUpdate}

@@ -139,7 +139,7 @@ export default function SettingsPage() {
       if (!masterKeyHash) {
         toast({
           title: "Error",
-          description: "No se encontró la contraseña maestra. Por favor, vuelve a iniciar sesión.",
+          description: "No se encontró la contraseña. Por favor, vuelve a iniciar sesión.",
           variant: "destructive"
         });
         return;
@@ -354,17 +354,17 @@ export default function SettingsPage() {
           <Button onClick={handleSaveSettings}>Guardar Configuración de Seguridad</Button>
         </Card>
 
-        {/* Sección de Cambio de Contraseña Maestra */}
+        {/* Sección de Cambio de Contraseña */}
         <Card className="p-6 space-y-6">
           <div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Cambiar Contraseña Maestra</h2>
-            <p className="text-sm text-muted-foreground">Actualiza tu contraseña maestra</p>
+            <h2 className="text-xl font-semibold text-foreground mb-2">Cambiar Contraseña</h2>
+            <p className="text-sm text-muted-foreground">Actualiza tu contraseña</p>
           </div>
           <Separator />
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="newpass">Nueva Contraseña Maestra</Label>
+              <Label htmlFor="newpass">Nueva Contraseña</Label>
               <Input
                 id="newpass"
                 type="password"

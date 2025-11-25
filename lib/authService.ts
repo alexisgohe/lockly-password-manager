@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/utils/supabase/client"
 
 /* ============================
    Derivar la master key (hash)
@@ -35,6 +35,8 @@ export async function deriveMasterKey(password: string, email: string) {
    SIGNUP
 ============================ */
 export async function signupWithEmail(email: string, password: string) {
+  const supabase = createClient()
+
   // 1. Derivar master key
   const masterKeyHash = await deriveMasterKey(password, email)
 
@@ -47,7 +49,7 @@ export async function signupWithEmail(email: string, password: string) {
   if (error) throw new Error(error.message)
   if (!data.user) throw new Error("Error de registro")
 
-  // 3. Guardar hash en la tabla usuarios (el trigger ya creó el registro)
+  // 3. Guardar hash en la tabla usuarios
   const { error: updateError } = await supabase
     .from("usuarios")
     .update({ hash_password_maestra: masterKeyHash })
@@ -55,7 +57,6 @@ export async function signupWithEmail(email: string, password: string) {
 
   if (updateError) {
     console.error("Error guardando hash:", updateError)
-    // No lanzar error, el usuario ya fue creado
   }
 
   return { user: data.user, masterKeyHash }
@@ -65,25 +66,25 @@ export async function signupWithEmail(email: string, password: string) {
    LOGIN
 ============================ */
 export async function loginUser(email: string, masterPassword: string) {
-  // 1. Autenticar con Supabase
-  const { data: authData, error: authError } =
-    await supabase.auth.signInWithPassword({
-      email,
-      password: masterPassword,
-    })
+  const supabase = createClient()
 
-  if (authError) throw new Error("Correo electrónico o contraseña no válidos")
-  if (!authData.user) throw new Error("Error de inicio de sesión")
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password: masterPassword,
+  })
 
-  // 2. Derivar master key para cifrado
+  if (error) throw new Error("Correo electrónico o contraseña no válidos")
+  if (!data.user) throw new Error("Error de inicio de sesión")
+
   const masterKeyHash = await deriveMasterKey(masterPassword, email)
 
-  return { user: authData.user, masterKeyHash }
+  return { user: data.user, masterKeyHash }
 }
 
 /* ============================
    LOGOUT
 ============================ */
 export async function logoutUser() {
+  const supabase = createClient()
   await supabase.auth.signOut()
 }

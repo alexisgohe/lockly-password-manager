@@ -67,7 +67,7 @@ export default function EditPasswordDialog({
   const handleUpdatePassword = async () => {
     const master = sessionStorage.getItem("masterKeyHash")
     if (!master) {
-      alert("No se encontró la contraseña maestra")
+      alert("No se encontró la contraseña")
       return
     }
 

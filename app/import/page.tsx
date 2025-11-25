@@ -37,7 +37,7 @@ export default function ImportPasswordsDialog({ usuarioId, onAddMultiple }: Impo
       const importedPasswords: UIPassword[] = []
 
       const masterKey = sessionStorage.getItem("masterKeyHash")
-      if (!masterKey) throw new Error("No se encontró la contraseña maestra")
+      if (!masterKey) throw new Error("No se encontró la contraseña")
 
       setProgress({ current: 0, total: dataLines.length })
 
@@ -96,7 +96,29 @@ export default function ImportPasswordsDialog({ usuarioId, onAddMultiple }: Impo
         </DialogHeader>
 
         <div className="space-y-4">
-          <input type="file" accept=".csv" onChange={handleFileChange} disabled={isLoading} />
+          <div>
+            <label
+              htmlFor="csv-upload"
+              className="block w-full cursor-pointer rounded-md border border-primary/40 bg-primary/5 px-4 py-3 text-center text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+            >
+              📁 Seleccionar archivo CSV
+            </label>
+
+            <input
+              id="csv-upload"
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange}
+              disabled={isLoading}
+              className="hidden"
+            />
+
+            {file && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Archivo seleccionado: <span className="font-medium">{file.name}</span>
+              </p>
+            )}
+          </div>
           <p className="text-sm text-muted-foreground">
             Formato CSV: <code>nombre_servicio,nombre_usuario,password,url?,notas?</code>
           </p>

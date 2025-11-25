@@ -34,7 +34,7 @@ export default function AddPasswordDialog({ onAdd, children }: AddPasswordDialog
     // 1. Obtener master key
     const master = sessionStorage.getItem("masterKeyHash")
     if (!master) {
-      alert("No se encontró la contraseña maestra")
+      alert("No se encontró la contraseña")
       return
     }
 

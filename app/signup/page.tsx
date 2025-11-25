@@ -83,11 +83,11 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Contraseña Maestra</Label>
+            <Label htmlFor="password">Contraseña</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Crea una contraseña maestra fuerte"
+              placeholder="Crea una contraseña fuerte"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -95,11 +95,11 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirmar Contraseña Maestra</Label>
+            <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
             <Input
               id="confirmPassword"
               type="password"
-              placeholder="Confirma tu contraseña maestra"
+              placeholder="Confirma tu contraseña"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
